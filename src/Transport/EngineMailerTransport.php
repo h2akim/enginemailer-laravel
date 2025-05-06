@@ -1,16 +1,13 @@
 <?php
 
-namespace HakimRazalan\EngineMailerDriver\Transport;
+namespace HakimRazalan\EngineMailerLaravel\Transport;
 
 use HakimRazalan\EngineMailer\Client as EngineMailer;
-use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
-use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\MessageConverter;
 use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\RawMessage;
 
 class EngineMailerTransport extends AbstractTransport
 {
@@ -32,16 +29,16 @@ class EngineMailerTransport extends AbstractTransport
             ->setToEmail(collect($email->getTo())->first()->getAddress())
             ->setSubject($email->getSubject())
             ->setSubmittedContent($email->getHtmlBody())
-            ->setCCEmails(collect($email->getCc())->map(function (Address $address) {
+            ->setCCEmails(collect($email->getCc())->map(function (Address $address): string {
                 return $address->getAddress();
             })->toArray())
-            ->setBCCEmails(collect($email->getBcc())->map(function (Address $address) {
+            ->setBCCEmails(collect($email->getBcc())->map(function (Address $address): string {
                 return $address->getAddress();
             })->toArray());
 
         // Handle attachments
-        if (! empty($email->getAttachments())) {
-            $attachments = collect($email->getAttachments())->map(function (DataPart $data) {
+        if ($email->getAttachments() !== []) {
+            $attachments = collect($email->getAttachments())->map(function (DataPart $data): array {
                 return [
                     'Filename' => $data->getFilename(),
                     'Content' => $data->bodyToString()

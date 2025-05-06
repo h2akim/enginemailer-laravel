@@ -1,9 +1,8 @@
 <?php
 
-namespace HakimRazalan\EngineMailerDriver;
+namespace HakimRazalan\EngineMailerLaravel;
 
-use HakimRazalan\EngineMailerDriver\Client\EngineMailer;
-use HakimRazalan\EngineMailerDriver\Transport\EngineMailerTransport;
+use HakimRazalan\EngineMailerLaravel\Transport\EngineMailerTransport;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Mail;
 use HakimRazalan\EngineMailer\Client;
@@ -13,7 +12,7 @@ class EngineMailerServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        Mail::extend('enginemailer', function (array $config) {
+        Mail::extend('enginemailer', function (array $config): \HakimRazalan\EngineMailerLaravel\Transport\EngineMailerTransport {
             $config = array_merge($this->app['config']->get('enginemailer', []), $config);
 
             $engineMailer = Client::setup(Arr::get($config, 'api_key'));
@@ -22,7 +21,7 @@ class EngineMailerServiceProvider extends ServiceProvider
         });      
     }
 
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/enginemailer.php', 'enginemailer');
     }
