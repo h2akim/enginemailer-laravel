@@ -29,5 +29,12 @@
     },
     "require-dev": {
         "rector/rector": "^2.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "HakimRazalan\\EngineMailerLaravel\\EngineMailerServiceProvider"
+            ]
+        }
     }
 }
