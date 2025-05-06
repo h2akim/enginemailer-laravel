@@ -23,9 +23,10 @@ class EngineMailerTransport extends AbstractTransport
 
         $mailer = $this->engineMailer->sendEmail();
         /** @var \HakimRazalan\EngineMailer\Two\Submission\SendEmail $mailer */
+        $sender = collect($email->getFrom())->first();
         $mailer = $mailer
-            ->setSenderEmail($email->getFrom())
-            ->setSenderName($email->getSender())
+            ->setSenderEmail($sender->getAddress())
+            ->setSenderName($sender->getName())
             ->setToEmail(collect($email->getTo())->first()->getAddress())
             ->setSubject($email->getSubject())
             ->setSubmittedContent($email->getHtmlBody())
